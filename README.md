@@ -26,6 +26,47 @@ dependencies {
 }
 ```
 
+# How to use it in an Activity
+
+```
+findViewById<Button>(R.id.get_permission).setOnClickListener {
+    LarkPermissions.requestPermission(this@MainActivity, object : LarkPermissions.PermissionCallback {
+        override fun granted() {
+            Toast.makeText(this@MainActivity, "granted", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun denied() {
+            Toast.makeText(this@MainActivity, "denied", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun goSettings() {
+            Toast.makeText(this@MainActivity, "goSettings", Toast.LENGTH_SHORT).show()
+        }
+
+    }, android.Manifest.permission.CAMERA)
+}
+```
+
+# How to use it in a Fragment
+
+```
+findViewById<Button>(R.id.get_permission).setOnClickListener {
+    LarkPermissions.requestPermission(activity, object : LarkPermissions.PermissionCallback {
+        override fun granted() {
+            Toast.makeText(activity, "granted", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun denied() {
+            Toast.makeText(activity, "denied", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun goSettings() {
+            Toast.makeText(activity, "goSettings", Toast.LENGTH_SHORT).show()
+        }
+
+    }, android.Manifest.permission.CAMERA)
+}
+```
 
 
 
