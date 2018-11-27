@@ -27,5 +27,6 @@ class MainActivity : AppCompatActivity() {
 
             }, android.Manifest.permission.CAMERA)
         }
+        supportFragmentManager.beginTransaction().add(R.id.container, TestFragment()).commit()
     }
 }

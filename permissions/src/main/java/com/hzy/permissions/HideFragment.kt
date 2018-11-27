@@ -20,15 +20,17 @@ open class HideFragment : Fragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (LarkPermissions.hasAllPermissionsGranted(grantResults)) {
-            callback?.granted()
-        } else {
-            for (permission in permissions) {
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, permission)) {
-                    callback?.goSettings()
-                    return
-                } else {
-                    callback?.denied()
+        if (requestCode == LarkPermissions.OK) {
+            if (LarkPermissions.hasAllPermissionsGranted(grantResults)) {
+                callback?.granted()
+            } else {
+                for (permission in permissions) {
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, permission)) {
+                        callback?.goSettings()
+                        return
+                    } else {
+                        callback?.denied()
+                    }
                 }
             }
         }

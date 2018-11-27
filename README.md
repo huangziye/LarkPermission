@@ -28,44 +28,149 @@ dependencies {
 
 # How to use it in an Activity
 
+### Kotlin
+
 ```
-findViewById<Button>(R.id.get_permission).setOnClickListener {
-    LarkPermissions.requestPermission(this@MainActivity, object : LarkPermissions.PermissionCallback {
-        override fun granted() {
-            Toast.makeText(this@MainActivity, "granted", Toast.LENGTH_SHORT).show()
-        }
+LarkPermissions.requestPermission(this,object:LarkPermissions.PermissionCallback{
+    override fun denied() {
+        Toast.makeText(this@MainActivity,"denied",Toast.LENGTH_SHORT).show()
+    }
 
-        override fun denied() {
-            Toast.makeText(this@MainActivity, "denied", Toast.LENGTH_SHORT).show()
-        }
+    override fun goSettings() {
+        Toast.makeText(this@MainActivity,"goSettings",Toast.LENGTH_SHORT).show()
+    }
 
-        override fun goSettings() {
-            Toast.makeText(this@MainActivity, "goSettings", Toast.LENGTH_SHORT).show()
-        }
+    override fun granted() {
+        Toast.makeText(this@MainActivity,"granted",Toast.LENGTH_SHORT).show()
+    }
+},android.Manifest.permission.CAMERA)
+```
 
-    }, android.Manifest.permission.CAMERA)
-}
+### Java
+
+```
+ LarkPermissions.Companion.requestPermission(this, new LarkPermissions.PermissionCallback() {
+    @Override
+    public void granted() {
+        Toast.makeText(MainActivity.this,"granted",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void denied() {
+        Toast.makeText(MainActivity.this,"denied",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void goSettings() {
+        Toast.makeText(MainActivity.this,"goSettings",Toast.LENGTH_SHORT).show();
+    }
+}, Manifest.permission.CAMERA);
 ```
 
 # How to use it in a Fragment
 
+### Kotlin
+
+
 ```
-findViewById<Button>(R.id.get_permission).setOnClickListener {
-    LarkPermissions.requestPermission(activity, object : LarkPermissions.PermissionCallback {
-        override fun granted() {
-            Toast.makeText(activity, "granted", Toast.LENGTH_SHORT).show()
-        }
+override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    Handler().postDelayed({
+        LarkPermissions.requestPermission(activity!!, object : LarkPermissions.PermissionCallback {
+            override fun granted() {
+                Toast.makeText(activity!!, "granted", Toast.LENGTH_SHORT).show()
+            }
 
-        override fun denied() {
-            Toast.makeText(activity, "denied", Toast.LENGTH_SHORT).show()
-        }
+            override fun denied() {
+                Toast.makeText(activity!!, "denied", Toast.LENGTH_SHORT).show()
+            }
 
-        override fun goSettings() {
-            Toast.makeText(activity, "goSettings", Toast.LENGTH_SHORT).show()
-        }
+            override fun goSettings() {
+                Toast.makeText(activity!!, "goSettings", Toast.LENGTH_SHORT).show()
+            }
+        }, Manifest.permission.CAMERA)
+    }, 10)
 
-    }, android.Manifest.permission.CAMERA)
 }
+```
+
+### Java
+
+```
+new Handler().postDelayed(new Runnable() {
+    @Override
+    public void run() {
+        LarkPermissions.Companion.requestPermission(getActivity(), new LarkPermissions.PermissionCallback() {
+            @Override
+            public void granted() {
+                Toast.makeText(getActivity(),"granted",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void denied() {
+                Toast.makeText(getActivity(),"denied",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void goSettings() {
+                Toast.makeText(getActivity(),"goSettings",Toast.LENGTH_SHORT).show();
+            }
+        },Manifest.permission.CAMERA);
+    }
+},10);
+```
+
+
+# If you are developing in Java, you need to support Kotlin and AndroidX
+
+### 1. gradle.properties
+
+Support AndroidX
+
+```
+android.useAndroidX=true
+android.enableJetifier=true
+```
+
+### 2. project/build.gradle
+
+```
+buildscript {
+    ext.kotlin_version = '1.2.71'
+    repositories {
+        ...
+    }
+    dependencies {
+        ...
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+### 3. app/build.gradle
+
+```
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+...
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    ...
+    implementation 'com.github.huangziye:LarkPermission:${latest_version}'
+}
+
 ```
 
 

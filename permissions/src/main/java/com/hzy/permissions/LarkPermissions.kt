@@ -19,7 +19,7 @@ open class LarkPermissions {
 
     companion object {
         private const val TAG = "fragment"
-        private const val OK = 200
+        const val OK = 200
         fun requestPermission(activity: FragmentActivity, callback: PermissionCallback, vararg perms: String) {
             for (perm in perms) {
                 if (ContextCompat.checkSelfPermission(activity, perm) != PackageManager.PERMISSION_GRANTED) {
@@ -29,8 +29,8 @@ open class LarkPermissions {
                         fragment = HideFragment()
                         fragmentManager.beginTransaction().add(fragment, TAG).commitAllowingStateLoss()
                     }
+                    fragmentManager.executePendingTransactions()
                     if (fragment is HideFragment) {
-                        fragmentManager.executePendingTransactions()
                         fragment.callback = callback
                         fragment.requestPermissions(perms, OK)
                     }
